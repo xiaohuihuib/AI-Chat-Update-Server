@@ -10,7 +10,7 @@
 const DEFAULT_RESPONSE = {
   version: "1.6.2",
   exe_version: "16",
-  download_url: "https://example.com/download/ai-chat-latest.exe",
+  download_url: "https://downloadcdn.xhhb.dpdns.org/download/ai-chat-latest.exe",
   release_date: "2025-12-25",
   changelog: {
     "1.6.2": "兼容更新服务器",
