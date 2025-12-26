@@ -10,7 +10,7 @@
 const DEFAULT_RESPONSE = {
   version: "1.6.2",
   exe_version: "16",
-  download_url: "https://downloadcdn.xhhb.dpdns.org/download/AI_Chat_Program.exe",
+  download_url: "https://pan.huang1111.cn/s/BGWjYF6?path=%2FAI-Chat",
   release_date: "2025-12-25",
   changelog: {
     "1.6.2": "兼容更新服务器",
@@ -24,8 +24,7 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:*"
 ];
 
-function getCorsHeaders(request) {
-  const origin = request.headers.get("Origin");
+function getCorsHeaders(origin) {
   const isAllowed = ALLOWED_ORIGINS.some(allowed => {
     if (allowed.endsWith(":*")) {
       return origin && origin.startsWith(allowed.slice(0, -2));
@@ -46,12 +45,26 @@ async function handleRequest(request) {
   const path = url.pathname;
   const method = request.method;
 
-  const corsHeaders = getCorsHeaders(request);
+  const origin = request.headers.get("Origin");
+  const isHttps = request.url.startsWith("https://");
+
+  if (!isHttps && method !== "OPTIONS") {
+    const httpsUrl = `https://${url.host}${url.pathname}${url.search}`;
+    return Response.redirect(httpsUrl, 301);
+  }
+
+  const corsHeaders = getCorsHeaders(request, origin);
 
   if (method === "OPTIONS") {
     return new Response(null, {
       status: 204,
-      headers: corsHeaders
+      headers: {
+        ...corsHeaders,
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "X-XSS-Protection": "1; mode=block"
+      }
     });
   }
 
@@ -63,7 +76,8 @@ async function handleRequest(request) {
       status: 405,
       headers: {
         ...corsHeaders,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
       }
     });
   }
@@ -82,6 +96,7 @@ async function handleRequest(request) {
         ...corsHeaders,
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "public, max-age=300",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
         "X-Content-Type-Options": "nosniff"
       }
     });
@@ -96,7 +111,8 @@ async function handleRequest(request) {
       status: 200,
       headers: {
         ...corsHeaders,
-        "Content-Type": "application/json; charset=utf-8"
+        "Content-Type": "application/json; charset=utf-8",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
       }
     });
   }
@@ -108,6 +124,7 @@ async function handleRequest(request) {
       description: "提供AI Chat应用的版本检查服务",
       endpoints: {
         "/": "获取版本信息",
+        "/version": "获取版本信息（API）",
         "/health": "健康检查",
         "/info": "服务器信息"
       }
@@ -115,7 +132,8 @@ async function handleRequest(request) {
       status: 200,
       headers: {
         ...corsHeaders,
-        "Content-Type": "application/json; charset=utf-8"
+        "Content-Type": "application/json; charset=utf-8",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
       }
     });
   }
@@ -128,7 +146,8 @@ async function handleRequest(request) {
     status: 404,
     headers: {
       ...corsHeaders,
-      "Content-Type": "application/json; charset=utf-8"
+      "Content-Type": "application/json; charset=utf-8",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
     }
   });
 }
