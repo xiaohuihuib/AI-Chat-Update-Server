@@ -25,15 +25,24 @@ const ALLOWED_ORIGINS = [
 ];
 
 function getCorsHeaders(origin) {
+  if (!origin || typeof origin !== 'string') {
+    return {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Max-Age": "86400"
+    };
+  }
+
   const isAllowed = ALLOWED_ORIGINS.some(allowed => {
     if (allowed.endsWith(":*")) {
-      return origin && origin.startsWith(allowed.slice(0, -2));
+      return origin.startsWith(allowed.slice(0, -2));
     }
     return origin === allowed;
   });
 
   return {
-    "Access-Control-Allow-Origin": isAllowed ? origin : "",
+    "Access-Control-Allow-Origin": isAllowed ? origin : "*",
     "Access-Control-Allow-Methods": "GET, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400"
@@ -53,7 +62,7 @@ async function handleRequest(request) {
     return Response.redirect(httpsUrl, 301);
   }
 
-  const corsHeaders = getCorsHeaders(request, origin);
+  const corsHeaders = getCorsHeaders(origin);
 
   if (method === "OPTIONS") {
     return new Response(null, {
