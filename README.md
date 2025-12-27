@@ -1,6 +1,6 @@
 # AI Chat 更新服务器
 
-这是AIGUI程序的更新服务器实现，基于Cloudflare Workers构建，提供版本检查和更新分发服务。
+这是AI Chat程序的更新服务器实现，基于Cloudflare Workers构建，提供版本检查和更新分发服务。
 
 ## 功能特性
 
