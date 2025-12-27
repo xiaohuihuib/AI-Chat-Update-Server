@@ -8,13 +8,14 @@
  */
 
 const DEFAULT_RESPONSE = {
-  version: "1.6.2",
-  exe_version: "16",
+  version: "1.7.0",
+  exe_version: "17",
   download_url: "https://pan.huang1111.cn/s/BGWjYF6?path=%2FAI-Chat",
-  release_date: "2025-12-25",
+  release_date: "2025-12-27",
   changelog: {
-    "1.6.2": "兼容更新服务器",
-    "1.6.1": "提升代码质量",
+    "1.7.0": "新增性能监控功能",
+    "1.7.0": "新增消息定时发送功能",
+    "1.7.0": "优化搜索消息功能"
   }
 };
 
